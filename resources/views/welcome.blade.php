@@ -1,43 +1,76 @@
-@extends('layouts.app')
+@extends('layouts.app') {{-- Si tu as un layout, sinon retire cette ligne --}}
 
 @section('content')
-<!-- HERO SECTION -->
-<section class="relative h-[70vh] flex items-center justify-center text-center text-white overflow-hidden">
-    <img src="https://images.unsplash.com/photo-1555992336-03a23a8c5f96?auto=format&fit=crop&w=1400&q=80" alt="Eat&Drink background" class="absolute inset-0 w-full h-full object-cover opacity-50"/>
-    <div class="relative z-10 max-w-3xl px-6">
-        <h1 class="text-4xl md:text-6xl font-extrabold drop-shadow-lg mb-4">Eat&Drink Cotonou</h1>
-        <p class="text-lg md:text-2xl mb-8 leading-relaxed drop-shadow">
-            🇧🇯 6ᵉ édition • 1 → 6 avril 2025 · Street‑food, cocktails, live music & cooking shows
+
+<div class="bg-gray-100 text-gray-800">
+
+    {{-- Section principale --}}
+    <div class="text-center py-20 px-6 bg-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Eat&Drink 2024</h1>
+        <p class="text-lg md:text-xl max-w-2xl mx-auto mb-6">
+            Découvrez le plus grand événement culinaire de la région ! Rencontrez nos artisans passionnés, dégustez leurs créations uniques et commandez vos produits favoris en ligne.
         </p>
-       @guest
-    <a href="/demande-stand" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-8 py-3 rounded-lg text-lg font-semibold transition">
-        Demander mon stand
-    </a>
-@else
-    <a href="/redirect-by-role" class="inline-block bg-green-600 hover:bg-green-700 px-8 py-3 rounded-lg text-lg font-semibold transition">
-        Accéder à mon espace
-    </a>
-@endguest
-
-    </div>
-</section>
-
-<!-- CONCEPT SECTION -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
-        <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=700&q=80" alt="Food stand" class="rounded-2xl shadow-lg"/>
-        <div>
-            <h2 class="text-3xl font-bold mb-4 text-gray-800">Un festival pour les gourmands et les créateurs</h2>
-            <p class="text-gray-600 mb-4 leading-relaxed">
-                Inspiré par la communauté <strong>@eatdrinkcotonou</strong> sur Instagram, Eat&Drink célèbre la scène food béninoise :
-            </p>
-            <ul class="space-y-2 text-gray-700">
-                <li>🍤 <strong>70+ stands</strong> de street‑food, artisans & chefs</li>
-                <li>🎧 <strong>Concerts live</strong> et DJ‑sets chaque soir</li>
-                <li>🍹 <strong>Ateliers cocktails</strong> & masterclasses culinaires</li>
-                <li>🏆 <strong>Concours “Meilleur Stand”</strong> avec votes du public</li>
-            </ul>
+        <div class="flex justify-center gap-4 mt-4">
+            <a href="#" class="bg-gray-900 text-white px-6 py-2 rounded hover:bg-gray-800">Découvrir les Exposants</a>
+            <a href="/demande-stand" class="bg-white border border-gray-300 px-6 py-2 rounded hover:bg-gray-200">Devenir Exposant</a>
         </div>
     </div>
-</section>
+
+    {{-- Infos événement --}}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 px-6 py-10 text-center bg-gray-50">
+        <div class="p-6 rounded shadow-sm bg-white">
+            <div class="text-3xl mb-2">📅</div>
+            <h3 class="font-semibold text-lg mb-1">Dates</h3>
+            <p>15–17 Mars 2024<br>3 jours de festivités</p>
+        </div>
+        <div class="p-6 rounded shadow-sm bg-white">
+            <div class="text-3xl mb-2">📍</div>
+            <h3 class="font-semibold text-lg mb-1">Lieu</h3>
+            <p>Palais des Congrès<br>Boulevard de la Marina, Cotonou</p>
+        </div>
+        <div class="p-6 rounded shadow-sm bg-white">
+            <div class="text-3xl mb-2">🧑‍🍳</div>
+            <h3 class="font-semibold text-lg mb-1">Exposants</h3>
+            <p>50+ Entrepreneurs<br>Producteurs locaux</p>
+        </div>
+        <div class="p-6 rounded shadow-sm bg-white">
+            <div class="text-3xl mb-2">🛒</div>
+            <h3 class="font-semibold text-lg mb-1">Commandes</h3>
+            <p>En ligne<br>Livraison possible</p>
+        </div>
+    </div>
+
+    {{-- Pourquoi participer ? --}}
+    <div class="py-14 bg-white px-6">
+        <h2 class="text-2xl font-bold text-center mb-10">Pourquoi Participer ?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <div class="text-3xl mb-2">🤝</div>
+                <h3 class="font-semibold text-lg mb-1">Rencontrez les Entreprenurs et restaurants</h3>
+                <p>Échangez directement avec nos entrepreneurs passionnés et découvrez leur savoir-faire.</p>
+            </div>
+            <div>
+                <div class="text-3xl mb-2">💻</div>
+                <h3 class="font-semibold text-lg mb-1">Commandez en Ligne</h3>
+                <p>Parcourez les stands virtuellement et commandez vos produits favoris depuis chez vous.</p>
+            </div>
+            <div>
+                <div class="text-3xl mb-2">🎉</div>
+                <h3 class="font-semibold text-lg mb-1">Événement Unique</h3>
+                <p>Trois jours d’animations, dégustations et découvertes culinaires exceptionnelles.</p>
+            </div>
+        </div>
+    </div>
+
+    {{-- Appel à l'action final --}}
+    <div class="bg-gray-900 text-white text-center py-16 px-6">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4">Rejoignez l'Aventure Eat&Drink</h2>
+        <p class="mb-6 max-w-2xl mx-auto">Que vous soyez visiteur ou entrepreneur, il y a une place pour vous dans notre événement !</p>
+        <div class="flex justify-center gap-4">
+            <a href="#" class="bg-white text-gray-900 px-6 py-2 rounded hover:bg-gray-200">Explorer les Stands</a>
+            <a href="/demande-stand" class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-700">Candidater comme Exposant</a>
+        </div>
+    </div>
+
+</div>
 @endsection
