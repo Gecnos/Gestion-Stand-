@@ -16,7 +16,6 @@ class DemandeStandController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Création de l'utilisateur avec rôle en attente
         $user = User::create([
             'name' => $request->input('nom'),
             'email' => $request->input('email'),
@@ -24,7 +23,7 @@ class DemandeStandController extends Controller
             'role' => 'pending',
         ]);
 
-        // Notification admin
+
         Mail::raw("Nouvelle demande de stand de : {$user->name} ({$user->email})", function ($message) use ($user) {
             $message->to('admin@eatdrink.com')
                     ->subject('Nouvelle demande de stand Eat&Drink')

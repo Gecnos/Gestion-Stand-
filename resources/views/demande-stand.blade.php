@@ -15,7 +15,7 @@
         <form method="POST" action="{{ route('demande.stand.submit') }}" class="space-y-6">
             @csrf
 
-            {{-- Nom --}}
+
             <div>
                 <label for="nom" class="block text-sm font-medium text-gray-700">Nom complet</label>
                 <input id="nom" name="nom" type="text" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"/>
@@ -24,7 +24,7 @@
                 @enderror
             </div>
 
-            {{-- Email --}}
+
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Adresse email</label>
                 <input id="email" name="email" type="email" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"/>
@@ -33,7 +33,7 @@
                 @enderror
             </div>
 
-            {{-- Mot de passe --}}
+
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
                 <input id="password" name="password" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"/>
@@ -42,13 +42,13 @@
                 @enderror
             </div>
 
-            {{-- Confirmation mot de passe --}}
+
             <div>
                 <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
                 <input id="password_confirmation" name="password_confirmation" type="password" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500"/>
             </div>
 
-            {{-- Submit --}}
+
             <div class="text-center">
                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded transition">
                     Envoyer la demande
