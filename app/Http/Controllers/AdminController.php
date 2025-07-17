@@ -23,7 +23,7 @@ class AdminController extends Controller
         $nbCommandes = Commande::count();
         $chiffreAffaires = Commande::sum('total');;
         $entrepreneurs = User::where('role', 'approuve')->get();
-        $entrepreneurs_rejetes = User::where('role', 'reject')->get();
+        $entrepreneurs_rejetes = User::where('role', 'rejete')->get();
         $entrepreneurs_suspendus = User::where('role', 'suspendu')->get();
 
         return view('admin.dashboard', compact('demandes', 'nbDemandes', 'nbExposants', 'nbCommandes', 'chiffreAffaires', 'entrepreneurs', 'entrepreneurs_rejetes', 'entrepreneurs_suspendus'));
