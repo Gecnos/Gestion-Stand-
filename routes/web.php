@@ -28,6 +28,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/approve/{id}', [AdminController::class, 'approve'])->name('admin.approve');
     Route::post('/admin/reject/{id}', [AdminController::class, 'reject'])->name('admin.reject');
+    Route::post('/admin/desuspendre/{id}', [AdminController::class, 'desuspendre'])->name('admin.desuspendre');
+    Route::post('/admin/suspendre/{id}', [AdminController::class, 'suspendre'])->name('admin.suspendre');
+    Route::post('/admin/faire-appel/{id}', [AdminController::class, 'faireAppel'])->name('admin.faire_appel');
+    Route::get('/admin/afficherEntepreneurs',[AdminController::class, 'afficherEntrepreneurs'])->name('admin.afficher');
 });
 
 Route::get('/demande-stand', function () {

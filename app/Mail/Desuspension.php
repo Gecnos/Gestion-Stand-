@@ -10,13 +10,13 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class DemandeRejete extends Mailable
+class Desuspension extends Mailable
 {
     public function __construct(public User $user) {}
 
     public function build()
     {
-        return $this->markdown('emails.demande_rejete')
-            ->subject('Votre demande a été rejete');
+        return $this->markdown('emails.desuspension')
+            ->subject("Desuspension");
     }
 }
