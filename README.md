@@ -65,30 +65,6 @@ Créer l’interface visiteur pour voir les stands, consulter les produits, et c
 #### 📁 Dossiers principaux :
 `resources/views/public/`, `app/Models/Commande.php`, `routes/web.php`, `app/Http/Controllers/PublicController.php`
 
----
 
-## 🧱 Stack Technique
 
-- **Framework :** Laravel (v10+)
-- **Langages :** PHP, Blade, JavaScript (jQuery ou Alpine), HTML/CSS
-- **Base de Données :** SQLite (recommandé pour démarrer) ou MySQL
-- **Outils :** Laravel Breeze/Fortify pour auth, Laravel Mail pour notification
 
----
-
-## ✅ Étapes recommandées
-
-1. **Initialisation commune du projet Laravel**
-2. **Création d’un repo GitHub partagé**
-3. **Branche par développeur ou par module**
-4. **Revue de code régulière et tests**
-5. **Fusion progressive vers la branche principale (`main` ou `dev`)**
-
----
-
-## 🔔 Communication
-
-Utilisez un fichier `README_MODULE.md` dans chaque sous-dossier ou une section dans le README global pour signaler :
-- Avancement
-- Décisions techniques
-- Routes ou APIs disponibles
