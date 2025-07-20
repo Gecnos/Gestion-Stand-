@@ -15,12 +15,16 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->get('/dashboard', function () {
     $user = Auth::user();
-    return match ($user->role) {
-        'admin' => redirect()->route('admin.dashboard'),
-        'approuve' => redirect()->route('entrepreneur.dashboard'),
-        default => redirect()->route('attente'),
-    };
+
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    } elseif ($user->role === 'approuve') {
+        return redirect()->route('entrepreneur.dashboard');
+    } else {
+        return redirect()->route('attente');
+    }
 })->name('dashboard');
+
 
 Route::middleware('auth')->get('/redirect-by-role', fn () => redirect()->route('dashboard'));
 
