@@ -7,7 +7,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DemandeStandController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEntrepreneur;
-
+use App\Http\Controllers\Produit;
+use App\Http\Controllers\StandController;
+use App\Http\Controllers\StandManageController;
+use App\Models\Stand;
 
 Route::get('/', function () {
     return view('welcome'); 
@@ -25,6 +28,20 @@ Route::middleware(['auth'])->get('/dashboard', function () {
     }
 })->name('dashboard');
 
+Route::get('/', [StandController::class, 'index'])->name('vitrine');
+Route::get('/stand/{id}', [StandController::class, 'show'])->name('stand.detail');
+
+Route::post('/panier/ajouter', [StandManageController::class, 'ajouter'])->name('panier.ajouter');
+Route::get('/panier', [StandManageController::class, 'voir'])->name('panier.voir');
+Route::delete('/panier/{id}', [StandManageController::class, 'supprimer'])->name('panier.supprimer');
+
+Route::post('/commande', [StandManageController::class, 'passerCommande'])->middleware('auth')->name('commande.valider');
+
+
+
+Route::middleware(['auth', 'approuve'])->group(function () {
+    Route::resource('produits', Produit::class);
+});
 
 Route::middleware('auth')->get('/redirect-by-role', fn () => redirect()->route('dashboard'));
 
@@ -45,7 +62,7 @@ Route::get('/demande-stand', function () {
 Route::post('/demande-stand', [DemandeStandController::class, 'submit'])->name('demande.stand.submit');
 
 
-Route::middleware(['auth', 'entrepreneur'])->get('/entrepreneur/dashboard', fn () => view('entrepreneur.dashboard'))->name('entrepreneur.dashboard');
+Route::middleware(['auth', 'approuve'])->get('/entrepreneur/dashboard', fn () => view('entrepreneur.dashboard'))->name('entrepreneur.dashboard');
 Route::middleware(['auth'])->get('/attente-validation', fn () => view('attente'))->name('attente');
 
 require __DIR__ . '/auth.php';
