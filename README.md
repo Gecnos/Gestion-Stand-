@@ -65,6 +65,11 @@ Créer l’interface visiteur pour voir les stands, consulter les produits, et c
 #### 📁 Dossiers principaux :
 `resources/views/public/`, `app/Models/Commande.php`, `routes/web.php`, `app/Http/Controllers/PublicController.php`
 
+### Finalement on a changé le travail de l'équipe 
+Vianney developpe back de tout interface admin, chef d'équipe 
+Feliciano Interface entrepreneur
+Crédo Interface commandes 
+
 
 
 
