@@ -1,75 +1,74 @@
-# 🍽️ Projet Laravel – Plateforme de Gestion de Stands **"Eat&Drink"**
 
-## 🎯 Objectif du Projet
-Développer une plateforme web pour gérer l'événement culinaire **Eat&Drink**, où les exposants (entrepreneurs) peuvent s'inscrire, présenter leurs produits, et les visiteurs (participants) peuvent consulter les stands et passer commande.
+# 🍽️ Eat&Drink – Plateforme de Gestion de Stands
 
----
-
-## 👥 Répartition du Travail – 3 Développeurs
-
-Ce projet est divisé en 3 parties **indépendantes mais complémentaires** :
+Projet Laravel 12 avec Vite.js pour la gestion d’un événement culinaire.  
+Les entrepreneurs peuvent s’inscrire et proposer leurs produits.  
+Les visiteurs peuvent explorer les stands et commander.  
+L’admin gère l’ensemble via un back-office complet.
 
 ---
 
-### 🔹 Vianney – Authentification & Gestion des Rôles
+## 🚀 Objectifs du Projet
 
-#### 🎯 Objectif :
-Mettre en place l’ossature du système : création de comptes, rôles, redirections, autorisations.
-
-#### 🛠️ Tâches :
-- Mise en place de l’auth Laravel (login/register/reset)
-- Création des rôles (`admin`, `entrepreneur_en_attente`, `entrepreneur_approuve`)
-- Middleware de sécurité selon rôle
-- Page de suivi de statut pour `entrepreneur_en_attente`
-- Dashboard admin : liste des demandes de stand
-- Fonction d’approbation ou de rejet des entrepreneurs
-- Seeder pour créer l'admin à la main
-
-#### 📁 Dossiers principaux :
-`app/Http/Middleware`, `routes/web.php`, `app/Models/User.php`, `resources/views/auth/`, `database/seeders/`
+- Digitaliser un événement culinaire avec gestion des exposants, produits et commandes.
+- Offrir une vitrine publique attractive pour les visiteurs.
+- Simplifier la gestion via une interface admin centralisée.
 
 ---
 
-### 🔹 Feliciano – Gestion des Stands & Produits
+## 🛠️ Stack Technique
 
-#### 🎯 Objectif :
-Créer tout le module pour les entrepreneurs **approuvés** : stands, produits, tableau de bord personnel.
+- **Laravel 12**
+- **Blade + Vite.js** (⚡ `npm run dev`)
+- **MySQL**
+- **Tailwind CSS**
+- Authentification avec rôles & middlewares Laravel
 
-#### 🛠️ Tâches :
-- Création du modèle `Stand` lié à `User`
-- Formulaire de création / édition de son propre stand
-- CRUD complet des produits :
+---
+
+## 👥 Répartition du Travail
+
+### 🔹 Vianney – Chef de projet & Développeur Back / Interface Admin
+
+- Authentification complète (register, login, reset)
+- Système de rôles :
+  - `admin`
+  - `entrepreneur_en_attente`
+  - `entrepreneur_approuve`
+- Middleware de sécurité
+- Dashboard Admin :
+  - Gestion des demandes de stands
+  - Approbation / Rejet des entrepreneurs
+  - Vue des commandes
+- Seeder d’utilisateur admin
+
+### 🔹 Feliciano – Interface Entrepreneur
+
+- Création & édition de son stand
+- CRUD des produits :
   - nom, description, prix, image
-- Dashboard Entrepreneur : page "Mes Produits"
-- Validation des formulaires (backend + front)
-
-#### 📁 Dossiers principaux :
-`app/Models/Stand.php`, `app/Models/Product.php`, `resources/views/entrepreneur/`, `routes/web.php`, `app/Http/Controllers/`
-
----
+- Dashboard personnel "Mes produits"
+- Validation des formulaires
 
 ### 🔹 Credo – Vitrine Publique & Commandes
 
-#### 🎯 Objectif :
-Créer l’interface visiteur pour voir les stands, consulter les produits, et commander.
+- Affichage public des stands approuvés
+- Page stand + liste de produits
+- Système de panier (session)
+- Soumission de commande
+- Enregistrement en base (modèle `Commande`)
+- Notification email automatique à l’entrepreneur
 
-#### 🛠️ Tâches :
-- Page publique : liste des stands approuvés
-- Page de chaque stand : présentation + produits
-- Système de panier (stocké en session)
-- Soumission de commande (pas de paiement)
-- Création du modèle `Commande`
-- Admin : consultation des commandes par stand
-- (Bonus) Envoi d’email à l’entrepreneur à chaque commande
+## 🔐 Identifiants Admin par Défaut
 
-#### 📁 Dossiers principaux :
-`resources/views/public/`, `app/Models/Commande.php`, `routes/web.php`, `app/Http/Controllers/PublicController.php`
+```bash
+Email : admin@eatdrink.com
+Mot de passe : password
+```
 
-### Finalement on a changé le travail de l'équipe 
-Vianney developpe back de tout interface admin, chef d'équipe 
-Feliciano Interface entrepreneur
-Crédo Interface commandes 
+## 👨‍💻 Auteurs
 
-
-
+* **Vianney** – Chef de projet, backend & interface admin
+* **Feliciano** – Module entrepreneur
+* **Credo** – Interface visiteur & commandes
 
