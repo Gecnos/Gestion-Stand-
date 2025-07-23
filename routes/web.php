@@ -28,7 +28,7 @@ Route::middleware(['auth'])->get('/dashboard', function () {
     }
 })->name('dashboard');
 
-Route::get('/', [StandController::class, 'index'])->name('vitrine');
+// Route::get('/', [StandController::class, 'index'])->name('vitrine');
 Route::get('/stand/{id}', [StandController::class, 'show'])->name('stand.detail');
 
 Route::post('/panier/ajouter', [StandManageController::class, 'ajouter'])->name('panier.ajouter');

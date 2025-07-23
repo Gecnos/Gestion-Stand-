@@ -10,9 +10,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function ($middleware) {
-        $middleware->register('admin', \App\Http\Middleware\IsAdmin::class);
-        $middleware->register('approuve', \App\Http\Middleware\IsEntrepreneur::class);
-    })
+ })
     ->withExceptions(function ($exceptions) {
         //
     })
