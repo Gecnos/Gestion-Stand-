@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Produits;
 
 
-class Produit extends Controller
+class ProduitController extends Controller
 {
     //Ici c'est l'index pour afficher les informations comme le nom du produits et tout ça , quand on veut afficher quelque chose dans le controller on l'appel dans l'index et on le retourne compact
     public function index()

@@ -59,6 +59,10 @@ Route::get('/demande-stand', function () {
     return view('demande-stand'); 
 })->name('demande.stand');
 
+Route::get('/stands/index',function (){return view('stands.index');})->name('stands.index');
+Route::get('/exposants', [StandController::class, 'index'])->name('stands.index');
+Route::get('/stand/{id}', [StandController::class, 'show'])->name('stands.show');
+
 Route::post('/demande-stand', [DemandeStandController::class, 'submit'])->name('demande.stand.submit');
 
 

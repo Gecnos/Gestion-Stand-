@@ -11,7 +11,7 @@
             Découvrez le plus grand événement culinaire de la région ! Rencontrez nos artisans passionnés, dégustez leurs créations uniques et commandez vos produits favoris en ligne.
         </p>
         <div class="flex justify-center gap-4 mt-4">
-            <a href="#" class="bg-gray-900 text-white px-6 py-2 rounded hover:bg-gray-800">Découvrir les Exposants</a>
+            <a href="/stands/index" class="bg-gray-900 text-white px-6 py-2 rounded hover:bg-gray-800">Découvrir les Exposants</a>
             <a href="/demande-stand" class="bg-white border border-gray-300 px-6 py-2 rounded hover:bg-gray-200">Devenir Exposant</a>
         </div>
     </div>
@@ -67,7 +67,7 @@
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Rejoignez l'Aventure Eat&Drink</h2>
         <p class="mb-6 max-w-2xl mx-auto">Que vous soyez visiteur ou entrepreneur, il y a une place pour vous dans notre événement !</p>
         <div class="flex justify-center gap-4">
-            <a href="#" class="bg-white text-gray-900 px-6 py-2 rounded hover:bg-gray-200">Explorer les Stands</a>
+            <a href="/stands/index" class="bg-white text-gray-900 px-6 py-2 rounded hover:bg-gray-200">Explorer les Stands</a>
             <a href="/demande-stand" class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-700">Candidater comme Exposant</a>
         </div>
     </div>
