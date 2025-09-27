@@ -26,49 +26,10 @@ L’admin gère l’ensemble via un back-office complet.
 
 ---
 
-## 👥 Répartition du Travail
-
-### 🔹 Vianney – Chef de projet & Développeur Back / Interface Admin
-
-- Authentification complète (register, login, reset)
-- Système de rôles :
-  - `admin`
-  - `entrepreneur_en_attente`
-  - `entrepreneur_approuve`
-- Middleware de sécurité
-- Dashboard Admin :
-  - Gestion des demandes de stands
-  - Approbation / Rejet des entrepreneurs
-  - Vue des commandes
-- Seeder d’utilisateur admin
-
-### 🔹 Feliciano – Interface Entrepreneur
-
-- Création & édition de son stand
-- CRUD des produits :
-  - nom, description, prix, image
-- Dashboard personnel "Mes produits"
-- Validation des formulaires
-
-### 🔹 Credo – Vitrine Publique & Commandes
-
-- Affichage public des stands approuvés
-- Page stand + liste de produits
-- Système de panier (session)
-- Soumission de commande
-- Enregistrement en base (modèle `Commande`)
-- Notification email automatique à l’entrepreneur
-
 ## 🔐 Identifiants Admin par Défaut
 
 ```bash
 Email : admin@eatdrink.com
 Mot de passe : password
 ```
-
-## 👨‍💻 Auteurs
-
-* **Vianney** – Chef de projet, backend & interface admin
-* **Feliciano** – Module entrepreneur
-* **Credo** – Interface visiteur & commandes
 
