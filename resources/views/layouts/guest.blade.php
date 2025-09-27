@@ -14,17 +14,23 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <body class="font-sans text-gray-900 antialiased bg-white"> {{-- S'assurer que le fond est blanc --}}
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+        {{-- INCLUSION DU HEADER ET GESTION DE LA MISE EN PAGE --}}
+        <header class="w-full">
+            @include('layouts.header')
+        </header>
+        
+        {{-- CENTRAGE DU CONTENU (FORMULAIRE) --}}
+        <div class="min-h-screen pt-20 flex flex-col items-center justify-start"> 
+            {{-- Le pt-20 (padding-top 5rem) est essentiel pour éviter que le formulaire ne se superpose au header --}}
+
+            {{-- Le slot $slot contient le formulaire de login --}}
+            {{ $slot }}
+
         </div>
+
+        {{-- L'élément Application-Logo peut être retiré car il est dans le header --}}
+
     </body>
 </html>

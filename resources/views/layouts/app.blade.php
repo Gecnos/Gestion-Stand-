@@ -16,7 +16,10 @@
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        @include('layouts.navigation')
+
+        @include('layouts.header')
+
+        {{-- @include('layouts.navigation')
 
         <!-- Page Heading -->
         @hasSection('header')
@@ -25,10 +28,10 @@
                     @yield('header')
                 </div>
             </header>
-        @endif
+        @endif --}}
 
         <!-- Page Content -->
-        <main>
+        <main class="pt-0">
             @yield('content')
         </main>
     </div>

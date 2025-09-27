@@ -1,11 +1,11 @@
-@extends('layouts.app') {{-- Si tu as un layout, sinon retire cette ligne --}}
+@extends('layouts.app')
 
 @section('content')
 
 <div class="bg-gray-100 text-gray-800">
 
-    {{-- Section principale --}}
-    <div class="text-center py-20 px-6 bg-white">
+    {{-- Section principale : pt-16 au lieu de py-20 pour contrôler l'espace du haut --}}
+    <div class="text-center pt-16 pb-20 px-6 bg-white">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">Eat&Drink 2024</h1>
         <p class="text-lg md:text-xl max-w-2xl mx-auto mb-6">
             Découvrez le plus grand événement culinaire de la région ! Rencontrez nos artisans passionnés, dégustez leurs créations uniques et commandez vos produits favoris en ligne.
