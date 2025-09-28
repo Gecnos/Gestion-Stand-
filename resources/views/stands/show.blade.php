@@ -165,25 +165,7 @@
                                 @csrf
                                 <input type="hidden" name="stand_id" value="{{ $stand->id }}">
                                 
-                                <h4 class="text-lg font-semibold text-gray-800 pt-4 border-t border-gray-100">Vos informations pour la livraison</h4>
-
-                                <div>
-                                    <label for="client_name" class="block text-sm font-medium text-gray-700">Nom complet</label>
-                                    <input type="text" name="client_name" id="client_name" value="{{ old('client_name') }}" required
-                                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
-                                    @error('client_name')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
                                 
-                                <div>
-                                    <label for="client_email" class="block text-sm font-medium text-gray-700">Email</label>
-                                    <input type="email" name="client_email" id="client_email" value="{{ old('client_email') }}" required
-                                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
-                                    @error('client_email')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
 
                                 <button type="submit"
                                     class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm 

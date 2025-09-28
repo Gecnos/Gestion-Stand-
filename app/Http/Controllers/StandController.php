@@ -73,17 +73,12 @@ class StandController extends Controller
      */
     public function storeOrder(Request $request)
     {
-        // Validation des champs nécessaires, y compris les informations de l'invité
+        // Validation des champs nécessaires
         $request->validate([
             'stand_id' => 'required|exists:stands,id',
-            // Informations requises pour l'invité
-            'client_name' => 'required|string|max:255',
-            'client_email' => 'required|email|max:255',
         ]);
 
         $standId = $request->input('stand_id');
-        $clientName = $request->input('client_name');
-        $clientEmail = $request->input('client_email');
 
         $cart = session()->get('cart', []);
 
@@ -112,7 +107,6 @@ class StandController extends Controller
 
         // Ajout des informations client aux détails pour un suivi facile
         $orderDetails = [
-            'client_info' => ['name' => $clientName, 'email' => $clientEmail],
             'items' => $details,
         ];
 
@@ -135,7 +129,7 @@ class StandController extends Controller
             session()->put('cart', $cart);
 
             return redirect()->route('stands.show', $standId)
-                ->with('success', 'Commande #' . $commande->id . ' enregistrée avec succès! Un email de confirmation sera envoyé à ' . $clientEmail . '.');
+                ->with('success', 'Commande #' . $commande->id . ' enregistrée avec succès!');
         } catch (\Exception $e) {
              // Log de l'erreur pour le débogage
             // \Log::error("Erreur d'enregistrement de commande: " . $e->getMessage()); 
