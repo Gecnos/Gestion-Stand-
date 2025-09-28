@@ -4,7 +4,6 @@
 
 <div class="bg-gray-100 text-gray-800">
 
-    {{-- Section principale : pt-16 au lieu de py-20 pour contrôler l'espace du haut --}}
     <div class="text-center pt-16 pb-20 px-6 bg-white">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">Eat&Drink 2024</h1>
         <p class="text-lg md:text-xl max-w-2xl mx-auto mb-6">
@@ -16,7 +15,7 @@
         </div>
     </div>
 
-    {{-- Infos événement --}}
+
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 px-6 py-10 text-center bg-gray-50">
         <div class="p-6 rounded shadow-sm bg-white">
             <div class="text-3xl mb-2">📅</div>
@@ -40,7 +39,7 @@
         </div>
     </div>
 
-    {{-- Pourquoi participer ? --}}
+
     <div class="py-14 bg-white px-6">
         <h2 class="text-2xl font-bold text-center mb-10">Pourquoi Participer ?</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -62,7 +61,6 @@
         </div>
     </div>
 
-    {{-- Appel à l'action final --}}
     <div class="bg-gray-900 text-white text-center py-16 px-6">
         <h2 class="text-2xl md:text-3xl font-bold mb-4">Rejoignez l'Aventure Eat&Drink</h2>
         <p class="mb-6 max-w-2xl mx-auto">Que vous soyez visiteur ou entrepreneur, il y a une place pour vous dans notre événement !</p>

@@ -72,7 +72,6 @@
                                 
                                 {{-- IMAGE DU PRODUIT AJOUTÉE ICI --}}
                                 @php
-                                    // Utilisation d'une image générique/placeholder si le produit n'a pas d'URL d'image
                                     $productImageUrl = $produit->image_url ?? 'https://placehold.co/600x400/3e4554/FFF?text=Produit';
                                 @endphp
 
@@ -80,7 +79,7 @@
                                     <img src="{{ $productImageUrl }}" alt="Image de {{ $produit->name ?? $produit->nom }}" 
                                          class="w-full h-full object-cover">
                                 </div>
-                                {{-- FIN IMAGE DU PRODUIT --}}
+
 
                                 <div class="p-6">
                                     <form action="{{ route('cart.add') }}" method="POST">
@@ -160,7 +159,7 @@
                                 </div>
                             </div>
 
-                            {{-- Formulaire de Finalisation de Commande (Pour Invité) --}}
+                            {{-- Formulaire de Finalisation de Commande  --}}
                             <form action="{{ route('order.store') }}" method="POST" class="mt-6 space-y-4">
                                 @csrf
                                 <input type="hidden" name="stand_id" value="{{ $stand->id }}">
