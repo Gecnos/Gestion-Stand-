@@ -10,6 +10,7 @@ use App\Http\Middleware\IsEntrepreneur;
 use App\Http\Controllers\Produit;
 use App\Http\Controllers\StandController;
 use App\Http\Controllers\StandManageController;
+use App\Models\Produits;
 use App\Models\Stand;
 
 Route::get('/', function () {
@@ -40,7 +41,7 @@ Route::post('/commande', [StandManageController::class, 'passerCommande'])->midd
 
 
 Route::middleware(['auth', 'approuve'])->group(function () {
-    Route::resource('produits', Produit::class);
+    Route::resource('produits', Produits::class);
 });
 
 Route::middleware('auth')->get('/redirect-by-role', fn () => redirect()->route('dashboard'));
@@ -62,7 +63,9 @@ Route::get('/demande-stand', function () {
 Route::get('/stands/index',function (){return view('stands.index');})->name('stands.index');
 Route::get('/exposants', [StandController::class, 'index'])->name('stands.index');
 Route::get('/stand/{id}', [StandController::class, 'show'])->name('stands.show');
-
+Route::post('/cart/add', [StandController::class, 'addToCart'])->name('cart.add');
+Route::post('/order/store', [StandController::class, 'storeOrder'])->name('order.store');
+Route::post('/cart/clear/{stand_id}', [StandController::class, 'clearCart'])->name('cart.clear');
 Route::post('/demande-stand', [DemandeStandController::class, 'submit'])->name('demande.stand.submit');
 
 

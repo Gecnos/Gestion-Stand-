@@ -1,122 +1,215 @@
 @extends('layouts.app')
 
 @section('content')
+    
+    @php
+        // Récupérer le panier actuel pour ce stand (par stand_id)
+        $cart = session('cart', []);
+        $standCart = $cart[$stand->id]['items'] ?? [];
+        $totalCartPrice = 0;
 
-    {{-- Bannière de l'Exposant (Hero Section) --}}
-    <div class="relative w-full h-80 bg-gray-900 overflow-hidden shadow-xl">
-        {{-- Image de fond du stand --}}
-        <img class="w-full h-full object-cover opacity-60" 
-             src="{{ $stand->image_url ?? 'https://placehold.co/1200x320/2F3647/FFFFFF?text=Stand+Detail' }}" 
-             alt="Bannière du stand {{ $stand->nom_stand }}">
+        foreach ($standCart as $item) {
 
-        {{-- Overlay de Contenu --}}
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent flex items-end">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 text-white w-full">
-                
-                <div class="flex items-center space-x-4 mb-2">
-                    {{-- Tag 'Exposant Certifié' --}}
+            $itemPrice = $item['prix'] ?? $item['price'] ?? 0;
+            $itemQuantity = $item['quantity'] ?? 0;
+
+            $totalCartPrice += $itemPrice * $itemQuantity;
+        }
+    @endphp
+
+    <div class="bg-gray-50 min-h-screen">
+        
+        {{-- Bannière du Stand --}}
+        <div class="relative bg-gray-900 h-96 overflow-hidden">
+            <img class="w-full h-full object-cover opacity-60" 
+                 {{-- Utilisation d'une image téléchargée comme fallback --}}
+                 src="{{ $stand->image_url ?? '__file_url__uploaded:image_480d8e.jpg-d1210ae2-3e1e-4411-845c-bedb13e86bbf' }}" 
+                 alt="Image du stand {{ $stand->nom_stand }}">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+            
+            <div class="absolute bottom-0 left-0 p-8 text-white max-w-7xl mx-auto w-full">
+                <div class="flex items-center space-x-3 mb-2">
                     @if ($stand->is_certified)
-                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold text-white bg-green-500 rounded-full shadow-lg">
-                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-500 text-white">
                             Exposant Certifié
                         </span>
                     @endif
-                    
-                    {{-- Numéro de Stand --}}
-                    <span class="inline-flex items-center text-xs font-medium text-gray-300">
-                        <svg class="w-4 h-4 mr-1 text-red-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-700 text-white">
                         Stand #{{ $stand->id }}
                     </span>
                 </div>
+                <h1 class="text-5xl font-extrabold">{{ $stand->nom_stand }}</h1>
+                <p class="text-xl text-gray-300">{{ $stand->description }}</p>
+            </div>
+        </div>
 
-                {{-- Titre et Description du Stand --}}
-                <h1 class="text-5xl font-extrabold tracking-tight mb-2">
-                    {{ $stand->nom_stand }}
-                </h1>
-                <p class="text-lg font-medium text-gray-300">
-                    {{ $stand->description }}
-                </p>
+        {{-- Contenu Principal (Produits et Panier) --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            
+            {{-- Messages de Session --}}
+            @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            <div class="flex flex-col lg:flex-row lg:space-x-8">
+
+                {{-- Colonne des Produits (Gauche) --}}
+                <div class="lg:w-3/4">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Nos Produits</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        @forelse ($stand->produits as $produit)
+                            {{-- Carte de Produit --}}
+                            <div class="bg-white rounded-xl shadow-lg flex flex-col justify-between border border-gray-100 overflow-hidden">
+                                
+                                {{-- IMAGE DU PRODUIT AJOUTÉE ICI --}}
+                                @php
+                                    // Utilisation d'une image générique/placeholder si le produit n'a pas d'URL d'image
+                                    $productImageUrl = $produit->image_url ?? 'https://placehold.co/600x400/3e4554/FFF?text=Produit';
+                                @endphp
+
+                                <div class="h-48">
+                                    <img src="{{ $productImageUrl }}" alt="Image de {{ $produit->name ?? $produit->nom }}" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                {{-- FIN IMAGE DU PRODUIT --}}
+
+                                <div class="p-6">
+                                    <form action="{{ route('cart.add') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="produit_id" value="{{ $produit->id }}">
+                                        
+                                        {{-- Ajoutez les informations nécessaires pour la création du panier (nom, prix, etc.) --}}
+                                        <input type="hidden" name="name" value="{{ $produit->name ?? $produit->nom }}">
+                                        <input type="hidden" name="prix" value="{{ $produit->prix }}">
+                                        
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-800 mb-1 line-clamp-1">{{ $produit->name ?? $produit->nom }}</h3> 
+                                            {{-- Utilise $produit->prix pour l'affichage --}}
+                                            <p class="text-2xl font-extrabold text-gray-900 mb-3">{{ number_format($produit->prix, 2, ',', ' ') }} CFA</p>
+                                            <p class="text-gray-600 text-sm line-clamp-2 mb-4">{{ $produit->description }}</p>
+                                        </div>
+
+                                        {{-- Contrôle de Quantité et Ajout --}}
+                                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                                                <button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                    class="bg-gray-100 hover:bg-gray-200 p-2 text-gray-600 font-bold transition duration-150">-</button>
+                                                <input type="number" name="quantity" min="1" value="1" readonly
+                                                    class="w-12 text-center border-none focus:ring-0 p-2 text-gray-800 bg-white">
+                                                <button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                    class="bg-gray-100 hover:bg-gray-200 p-2 text-gray-600 font-bold transition duration-150">+</button>
+                                            </div>
+
+                                            <button type="submit"
+                                                class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg shadow-md 
+                                                        text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                                Ajouter au panier
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-gray-500 col-span-full">Cet exposant n'a pas encore ajouté de produits.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Colonne du Panier (Droite) --}}
+                <div class="lg:w-1/4 mt-10 lg:mt-0">
+                    <div class="sticky top-4 bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-3">Votre Panier</h3>
+                        
+                        {{-- Liste des Produits dans le Panier --}}
+                        @if (empty($standCart))
+                            <p class="text-gray-500 italic">Le panier est vide pour ce stand.</p>
+                        @else
+                            <div class="space-y-4">
+                                @foreach ($standCart as $id => $item)
+                                    @php
+                                        // On utilise le même prix robuste pour l'affichage que pour le calcul du total.
+                                        $itemPrice = $item['prix'] ?? $item['price'] ?? 0;
+                                    @endphp
+                                    <div class="flex justify-between items-start text-sm">
+                                        <p class="text-gray-700 font-medium">
+                                            {{ $item['quantity'] }} x {{ $item['name'] }} 
+                                            {{-- Utilise $itemPrice --}}
+                                            <span class="text-gray-500">({{ number_format($itemPrice, 2, ',', ' ') }} CFA)</span>
+                                        </p>
+                                        {{-- Utilise $itemPrice pour le calcul du sous-total --}}
+                                        <p class="text-gray-900 font-semibold">{{ number_format($itemPrice * $item['quantity'], 2, ',', ' ') }} CFA</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                            
+                            {{-- Total --}}
+                            <div class="pt-4 mt-6 border-t border-gray-200">
+                                <div class="flex justify-between font-bold text-lg text-green-600">
+                                    <span>Total de la commande</span>
+                                    <span>{{ number_format($totalCartPrice, 2, ',', ' ') }} CFA</span>
+                                </div>
+                            </div>
+
+                            {{-- Formulaire de Finalisation de Commande (Pour Invité) --}}
+                            <form action="{{ route('order.store') }}" method="POST" class="mt-6 space-y-4">
+                                @csrf
+                                <input type="hidden" name="stand_id" value="{{ $stand->id }}">
+                                
+                                <h4 class="text-lg font-semibold text-gray-800 pt-4 border-t border-gray-100">Vos informations pour la livraison</h4>
+
+                                <div>
+                                    <label for="client_name" class="block text-sm font-medium text-gray-700">Nom complet</label>
+                                    <input type="text" name="client_name" id="client_name" value="{{ old('client_name') }}" required
+                                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
+                                    @error('client_name')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                
+                                <div>
+                                    <label for="client_email" class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" name="client_email" id="client_email" value="{{ old('client_email') }}" required
+                                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500">
+                                    @error('client_email')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <button type="submit"
+                                    class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm 
+                                            text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+                                    Confirmer et Payer ({{ number_format($totalCartPrice, 2, ',', ' ') }} CFA)
+                                </button>
+                            </form>
+                            
+                            {{-- Bouton pour vider le panier --}}
+                            <form action="{{ route('cart.clear', ['stand_id' => $stand->id]) }}" method="POST" class="mt-4">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg 
+                                            text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition duration-150 ease-in-out">
+                                    Vider le Panier
+                                </button>
+                            </form>
+
+                        @endif
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-
-    {{-- Section des Produits --}}
-    <div class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 px-4 sm:px-0">Nos Produits</h2>
-
-            @if ($stand->produits && $stand->produits->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    {{-- Boucle sur les produits de l'exposant --}}
-                    @foreach ($stand->produits as $produit)
-
-                        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden flex flex-col">
-                            
-                            {{-- Image du produit (simulée ici sans véritable image pour la carte produit) --}}
-                            <div class="h-48 bg-gray-100 flex items-center justify-center">
-                                <span class="text-gray-400 text-sm">Image de {{ $produit->name }}</span>
-                            </div>
-
-                            <div class="p-6 flex flex-col justify-between flex-grow">
-                                <div>
-                                    {{-- Nom du produit --}}
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-1">
-                                        {{ $produit->name }}
-                                    </h3>
-                                    
-                                    {{-- Prix du produit --}}
-                                    <p class="text-2xl font-bold text-gray-900 mb-2">
-                                        {{ number_format($produit->price, 2, ',', ' ') }} CFA
-                                    </p>
-
-                                    {{-- Description du produit --}}
-                                    <p class="text-gray-500 text-sm mb-4 line-clamp-2 h-10">
-                                        {{ $produit->description ?? 'Pas de description.' }}
-                                    </p>
-                                </div>
-
-                                {{-- Bloc d'ajout au panier --}}
-                                <form action="#" method="POST" class="mt-4">
-                                    @csrf {{-- Anti-CSRF token pour Laravel --}}
-                                    
-                                    <input type="hidden" name="produit_id" value="{{ $produit->id }}">
-
-                                    <div class="flex items-center justify-between space-x-4">
-                                        
-                                        {{-- Contrôles de quantité (très simplifiés) --}}
-                                        <div class="flex items-center border border-gray-300 rounded-lg p-1 text-gray-700">
-                                            {{-- Boutons/Inputs de quantité devraient être gérés par JS, ici c'est statique pour le template --}}
-                                            <button type="button" class="w-8 h-8 flex items-center justify-center text-lg hover:bg-gray-100 rounded-md font-medium" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                -
-                                            </button>
-                                            <input type="number" name="quantity" value="1" min="1" max="10" readonly
-                                                   class="w-12 text-center text-sm border-0 focus:ring-0 bg-transparent p-0">
-                                            <button type="button" class="w-8 h-8 flex items-center justify-center text-lg hover:bg-gray-100 rounded-md font-medium" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                +
-                                            </button>
-                                        </div>
-
-                                        {{-- Bouton Ajouter au panier --}}
-                                        <button type="submit"
-                                                class="flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg 
-                                                       text-white bg-gray-900 hover:bg-gray-700 transition duration-150 shadow-md">
-                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                            Ajouter au panier
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                    @endforeach
-                </div>
-            @else
-                <p class="text-center text-gray-500 mt-8 text-lg">Cet exposant n'a pas encore de produits listés.</p>
-            @endif
-
-            {{-- Bouton de retour --}}
+                {{-- Bouton de retour --}}
             <div class="mt-12 text-center">
                 <a href="{{ route('stands.index') }}" class="text-gray-600 hover:text-gray-800 text-base font-medium transition duration-150 flex items-center justify-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -124,6 +217,4 @@
                 </a>
             </div>
 
-        </div>
-    </div>
 @endsection
