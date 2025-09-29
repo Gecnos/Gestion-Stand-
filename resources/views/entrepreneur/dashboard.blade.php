@@ -6,7 +6,7 @@
 
     {{-- Quick stats or shortcuts --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="{{ entrepreneur.create }}" class="p-6 rounded-lg shadow bg-white hover:bg-gray-50 transition flex items-center space-x-4">
+        <a href="{{ route('entrepreneur.create') }}" class="p-6 rounded-lg shadow bg-white hover:bg-gray-50 transition flex items-center space-x-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-green-600">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>

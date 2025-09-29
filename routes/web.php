@@ -66,6 +66,9 @@ Route::post('/demande-stand', [DemandeStandController::class, 'submit'])->name('
 
 Route::post('/stand/create', [StandController::class, 'createStand'])->middleware('auth')->name('entrepreneur.create');
 Route::get('/entrepreneur/create',function (){return view('entrepreneur.create');})->name('entrepreneur.create');
+Route::get('/stands/create', [StandController::class, 'create'])->name('stands.create');
+Route::post('/stands', [StandController::class, 'createStand'])->name('stands.store');
+
 Route::get ('/entrepreneur/dashboard', function(){return view('entrepreneur.dashboard');})->name('entrepreneur.dashboard');
 Route::get('/entrepreneur/panier',function (){return view('entrepreneur.panier'); })->name('entrepreneur.panier');
 require __DIR__ . '/auth.php';

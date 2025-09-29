@@ -26,14 +26,29 @@ class StandController extends Controller
     public function createStand(Request $request)
     {
         $validated = $request->validate([
-            'nom_stand' => 'required|string|max:255',
+            'nom_stand'   => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'image_url' => 'nullable|url',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif', 
         ]);
-        $stand = new Stand($validated);
-        $stand->user_id = Auth::id();
-        $stand->save();
-        return redirect()->route('entrepreneur.dashboard')->with('success', 'Stand créé avec succès !');
+
+        // Upload si une image est présente
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('stands', 'public');
+            $validated['image_url'] = 'storage/' . $path;
+        }
+
+        $validated['user_id'] = Auth::id();
+
+        Stand::create($validated);
+
+        return redirect()->route('entrepreneur.dashboard')
+            ->with('success', 'Stand créé avec succès !');
+    }
+
+
+    public function create()
+    {
+        return view('stands.create');
     }
 
     public function addToCart(Request $request)
@@ -41,7 +56,7 @@ class StandController extends Controller
         $validated = $request->validate([
             'produit_id' => 'required|exists:produits,id',
             'quantity' => 'required|integer|min:1',
-            'name' => 'required|string', 
+            'name' => 'required|string',
             'prix' => 'required|numeric',
         ]);
 
@@ -58,9 +73,9 @@ class StandController extends Controller
             $cart[$standId]['items'][$produit->id]['quantity'] += $validated['quantity'];
         } else {
             $cart[$standId]['items'][$produit->id] = [
-                
-                'name' => $validated['name'], 
-                'prix' => $validated['prix'], 
+
+                'name' => $validated['name'],
+                'prix' => $validated['prix'],
                 'quantity' => $validated['quantity'],
             ];
         }
@@ -93,13 +108,13 @@ class StandController extends Controller
         foreach ($standCart as $item) {
 
             $itemPrice = $item['prix'] ?? $item['price'] ?? 0;
-            
+
             $subtotal = $itemPrice * $item['quantity'];
             $total += $subtotal;
             $details[] = [
-                'produit_name' => $item['name'] ?? 'Nom Inconnu', 
+                'produit_name' => $item['name'] ?? 'Nom Inconnu',
                 'quantity' => $item['quantity'],
-                'price' => $itemPrice, 
+                'price' => $itemPrice,
                 'subtotal' => $subtotal,
             ];
         }
@@ -112,13 +127,13 @@ class StandController extends Controller
         // Enregistrement de la Commande
         try {
             $commande = Commande::create([
-                
+
                 'user_id' => Auth::id(),
                 'stand_id' => $standId,
                 'statut' => 'en_attente_paiement',
                 'montant' => $total,
                 'total' => $total,
-                
+
                 'details_commande' => json_encode($orderDetails),
                 'date_commande' => Carbon::now(),
             ]);
@@ -134,21 +149,21 @@ class StandController extends Controller
             return back()->with('error', 'Erreur lors de l\'enregistrement de la commande. Veuillez réessayer.');
         }
     }
-    
+
     /**
      * Vide le panier pour un stand spécifique.
      */
     public function clearCart($standId)
     {
         $cart = session()->get('cart', []);
-        
+
         if (isset($cart[$standId])) {
             unset($cart[$standId]); // Supprime l'entrée complète du stand
             session()->put('cart', $cart);
-            
+
             return back()->with('success', 'Le panier pour ce stand a été vidé avec succès.');
         }
-        
+
         return back()->with('error', 'Le panier de ce stand est déjà vide.');
     }
 }
