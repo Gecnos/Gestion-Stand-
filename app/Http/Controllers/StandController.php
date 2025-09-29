@@ -23,6 +23,18 @@ class StandController extends Controller
         return view('stands.show', compact('stand'));
     }
 
+    public function createStand(Request $request)
+    {
+        $validated = $request->validate([
+            'nom_stand' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'image_url' => 'nullable|url',
+        ]);
+        $stand = new Stand($validated);
+        $stand->user_id = Auth::id();
+        $stand->save();
+        return redirect()->route('entrepreneur.dashboard')->with('success', 'Stand créé avec succès !');
+    }
 
     public function addToCart(Request $request)
     {

@@ -29,20 +29,18 @@ Route::middleware(['auth'])->get('/dashboard', function () {
     }
 })->name('dashboard');
 
-// Route::get('/', [StandController::class, 'index'])->name('vitrine');
-Route::get('/stand/{id}', [StandController::class, 'show'])->name('stand.detail');
 
-Route::post('/panier/ajouter', [StandManageController::class, 'ajouter'])->name('panier.ajouter');
-Route::get('/panier', [StandManageController::class, 'voir'])->name('panier.voir');
-Route::delete('/panier/{id}', [StandManageController::class, 'supprimer'])->name('panier.supprimer');
+// Route::post('/panier/ajouter', [StandManageController::class, 'ajouter'])->name('panier.ajouter');
+// Route::get('/panier', [StandManageController::class, 'voir'])->name('panier.voir');
+// Route::delete('/panier/{id}', [StandManageController::class, 'supprimer'])->name('panier.supprimer');
 
-Route::post('/commande', [StandManageController::class, 'passerCommande'])->middleware('auth')->name('commande.valider');
+// Route::post('/commande', [StandManageController::class, 'passerCommande'])->middleware('auth')->name('commande.valider');
 
 
 
-Route::middleware(['auth', 'approuve'])->group(function () {
-    Route::resource('produits', Produits::class);
-});
+// Route::middleware(['auth', 'approuve'])->group(function () {
+//     Route::resource('produits', Produits::class);
+// });
 
 Route::middleware('auth')->get('/redirect-by-role', fn () => redirect()->route('dashboard'));
 
@@ -56,9 +54,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/afficherEntepreneurs',[AdminController::class, 'afficherEntrepreneurs'])->name('admin.afficher');
 });
 
-Route::get('/demande-stand', function () {
-    return view('demande-stand'); 
-})->name('demande.stand');
+Route::get('/demande-stand', function () {return view('demande-stand'); })->name('demande.stand');
 
 Route::get('/stands/index',function (){return view('stands.index');})->name('stands.index');
 Route::get('/exposants', [StandController::class, 'index'])->name('stands.index');
@@ -68,8 +64,8 @@ Route::post('/order/store', [StandController::class, 'storeOrder'])->name('order
 Route::post('/cart/clear/{stand_id}', [StandController::class, 'clearCart'])->name('cart.clear');
 Route::post('/demande-stand', [DemandeStandController::class, 'submit'])->name('demande.stand.submit');
 
-
-Route::middleware(['auth', 'approuve'])->get('/entrepreneur/dashboard', fn () => view('entrepreneur.dashboard'))->name('entrepreneur.dashboard');
-Route::middleware(['auth'])->get('/attente-validation', fn () => view('attente'))->name('attente');
-
+Route::post('/stand/create', [StandController::class, 'createStand'])->middleware('auth')->name('entrepreneur.create');
+Route::get('/entrepreneur/create',function (){return view('entrepreneur.create');})->name('entrepreneur.create');
+Route::get ('/entrepreneur/dashboard', function(){return view('entrepreneur.dashboard');})->name('entrepreneur.dashboard');
+Route::get('/entrepreneur/panier',function (){return view('entrepreneur.panier'); })->name('entrepreneur.panier');
 require __DIR__ . '/auth.php';
