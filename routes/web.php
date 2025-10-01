@@ -9,40 +9,19 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEntrepreneur;
 use App\Http\Controllers\Produit;
 use App\Http\Controllers\StandController;
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\StandManageController;
 use App\Models\Produits;
 use App\Models\Stand;
+use App\Http\Middleware\CheckStand;
 
 Route::get('/', function () {
     return view('welcome'); 
 })->name('welcome');
 
-Route::middleware(['auth'])->get('/dashboard', function () {
-    $user = Auth::user();
-
-    if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    } elseif ($user->role === 'approuve') {
-        return redirect()->route('entrepreneur.dashboard');
-    } else {
-        return redirect()->route('attente');
-    }
-})->name('dashboard');
-
-
-// Route::post('/panier/ajouter', [StandManageController::class, 'ajouter'])->name('panier.ajouter');
-// Route::get('/panier', [StandManageController::class, 'voir'])->name('panier.voir');
-// Route::delete('/panier/{id}', [StandManageController::class, 'supprimer'])->name('panier.supprimer');
-
-// Route::post('/commande', [StandManageController::class, 'passerCommande'])->middleware('auth')->name('commande.valider');
-
-
-
-// Route::middleware(['auth', 'approuve'])->group(function () {
-//     Route::resource('produits', Produits::class);
-// });
-
-Route::middleware('auth')->get('/redirect-by-role', fn () => redirect()->route('dashboard'));
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+});
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');

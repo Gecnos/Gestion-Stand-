@@ -28,7 +28,7 @@ class StandController extends Controller
         $validated = $request->validate([
             'nom_stand'   => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif', 
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         // Upload si une image est présente
@@ -165,5 +165,22 @@ class StandController extends Controller
         }
 
         return back()->with('error', 'Le panier de ce stand est déjà vide.');
+    }
+
+    public function dashboard()
+    {
+        $user = Auth::user();
+
+        // Vérifie si l'utilisateur a un stand
+        $stand = $user->stand; // en supposant que la relation est définie dans User.php
+
+        if (!$stand) {
+            // Pas encore de stand → redirection vers la page de création
+            return redirect()->route('entrepreneur.create')
+                ->with('info', 'Veuillez créer votre stand pour accéder au tableau de bord.');
+        }
+
+        // Si le stand existe → affiche le dashboard avec les infos du stand
+        return view('entrepreneur.dashboard', compact('stand'));
     }
 }

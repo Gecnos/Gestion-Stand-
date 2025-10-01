@@ -11,5 +11,6 @@ class MiddlewareServiceProvider extends ServiceProvider
     {
         $router->aliasMiddleware('admin', \App\Http\Middleware\IsAdmin::class);
         $router->aliasMiddleware('entrepreneur', \App\Http\Middleware\IsEntrepreneur::class);
+        $router->aliasMiddleware('check.stand', \App\Http\Middleware\CheckStand::class);
     }
 }
