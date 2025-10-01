@@ -45,9 +45,22 @@ Route::post('/demande-stand', [DemandeStandController::class, 'submit'])->name('
 
 Route::post('/stand/create', [StandController::class, 'createStand'])->middleware('auth')->name('entrepreneur.create');
 Route::get('/entrepreneur/create',function (){return view('entrepreneur.create');})->name('entrepreneur.create');
-Route::get('/stands/create', [StandController::class, 'create'])->name('stands.create');
+Route::get('/stands/create', [StandController::class, 'create'])->name('entrepreneur.create');
 Route::post('/stands', [StandController::class, 'createStand'])->name('stands.store');
 
-Route::get ('/entrepreneur/dashboard', function(){return view('entrepreneur.dashboard');})->name('entrepreneur.dashboard');
-Route::get('/entrepreneur/panier',function (){return view('entrepreneur.panier'); })->name('entrepreneur.panier');
+Route::middleware(['auth', 'entrepreneur', 'check.stand'])->group(function () {
+    Route::get('/entrepreneur/dashboard', [StandController::class, 'dashboard'])->name('entrepreneur.dashboard');
+    Route::post('/products', [StandController::class, 'storeProduct'])->name('products.store');
+    Route::get('/entrepreneur/orders', [StandController::class, 'orders'])->name('entrepreneur.orders'); // Nouvelle route pour les commandes de l'entrepreneur
+    Route::get('/entrepreneur/panier', function () {
+        return view('entrepreneur.panier');
+    })->name('entrepreneur.panier');
+});
+Route::get('/products/index', [StandController::class, 'index'])->name('products.index');
+Route::get('/products/create', [StandController::class, 'createProduct'])->name('products.create');
+Route::get('/products/{id}', [StandController::class, 'show'])->name('products.show');
+Route::get('/orders', [StandController::class, 'orders'])->name('orders.index');
+Route::get('/attente', function () {
+    return view('attente');
+})->name('attente');
 require __DIR__ . '/auth.php';

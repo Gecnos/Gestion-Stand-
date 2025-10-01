@@ -28,7 +28,7 @@ class StandController extends Controller
         $validated = $request->validate([
             'nom_stand'   => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Upload si une image est présente
@@ -37,8 +37,11 @@ class StandController extends Controller
             $validated['image_url'] = 'storage/' . $path;
         }
 
-        $validated['user_id'] = Auth::id();
-
+        $validated['utilisateur_id'] = Auth::id();
+        // Le stand est mis en 'en_attente' ou 'approuve' par défaut selon votre business logic
+        // Pour cet exemple, on suppose qu'il a un statut
+        $validated['statut'] = 'approuve'; 
+        
         Stand::create($validated);
 
         return redirect()->route('entrepreneur.dashboard')
@@ -48,7 +51,60 @@ class StandController extends Controller
 
     public function create()
     {
-        return view('stands.create');
+        return view('entrepreneur.create');
+    }
+    public function createProduct()
+    {
+        $stand = Auth::user()->stand;
+        if (!$stand) {
+            return redirect()->route('entrepreneur.create')->with('error', 'Vous devez d\'abord créer un stand.');
+        }
+        return view('products.create', ['standId' => $stand->id]);
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'stand_id' => 'required|exists:stands,id'
+        ]);
+
+        $stand = Auth::user()->stand;
+
+        // Vérifier que le stand_id du formulaire correspond bien au stand de l'utilisateur authentifié
+        if ($stand->id != $request->input('stand_id')) {
+            return back()->with('error', 'Action non autorisée.');
+        }
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+        }
+
+        Produits::create([
+            'nom' => $request->name,
+            'description' => $request->description,
+            'prix' => $request->price,
+            'image_url' => $imagePath,
+            'stand_id' => $stand->id,
+        ]);
+
+        return redirect()->route('entrepreneur.dashboard')->with('success', 'Produit ajouté avec succès !');
+    }
+
+    public function orders()
+    {
+        $stand = Auth::user()->stand;
+        if (!$stand) {
+            return redirect()->route('entrepreneur.create')->with('error', 'Vous devez avoir un stand pour voir les commandes.');
+        }
+
+        $orders = Commande::where('stand_id', $stand->id)->with('user')->latest()->get();
+
+        return view('orders.index', ['orders' => $orders, 'stand' => $stand]);
     }
 
     public function addToCart(Request $request)
@@ -90,6 +146,9 @@ class StandController extends Controller
         // Validation des champs nécessaires
         $request->validate([
             'stand_id' => 'required|exists:stands,id',
+            // On s'attend à 'nom_complet' et 'email' dans le formulaire de stand
+            'nom_complet' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
         ]);
 
         $standId = $request->input('stand_id');
@@ -122,6 +181,11 @@ class StandController extends Controller
         // Ajout des informations client aux détails pour un suivi facile
         $orderDetails = [
             'items' => $details,
+            'client' => [
+                'nom_complet' => $request->input('nom_complet'),
+                'email' => $request->input('email'),
+                'user_id_guest_or_auth' => Auth::id() ?? session('guest_id'),
+            ]
         ];
 
         // Enregistrement de la Commande
@@ -171,16 +235,45 @@ class StandController extends Controller
     {
         $user = Auth::user();
 
-        // Vérifie si l'utilisateur a un stand
-        $stand = $user->stand; // en supposant que la relation est définie dans User.php
+        // Vérifie si l'utilisateur a un stand (relation 'stand' nécessaire dans User.php)
+        $stand = $user->stand; 
 
         if (!$stand) {
             // Pas encore de stand → redirection vers la page de création
             return redirect()->route('entrepreneur.create')
                 ->with('info', 'Veuillez créer votre stand pour accéder au tableau de bord.');
         }
+        
+        // --- Récupération des données réelles ---
+        
+        // 1. Nombre de produits
+        $productsCount = $stand->produits()->count();
+        
+        // 2. Commandes (On filtre pour les commandes du stand et qui ne sont pas annulées)
+        $orders = Commande::where('stand_id', $stand->id)
+                          ->where('statut', '!=', 'annulee')
+                          ->get();
+
+        $ordersCount = $orders->count();
+        
+        // 3. Chiffre d'affaires (Total des commandes 'payee' ou 'livree')
+        $revenue = $orders->whereIn('statut', ['payee', 'livree'])->sum('total');
+
+        // 4. Visibilité (statut du stand)
+        $visibility = ($stand->statut == 'approuve' || $stand->statut == 'publie') ? 'Public' : 'Privé / En Attente';
+        
+        // 5. Statut d'approbation pour la bannière
+        $isApproved = $stand->statut == 'approuve' || $stand->statut == 'publie';
 
         // Si le stand existe → affiche le dashboard avec les infos du stand
-        return view('entrepreneur.dashboard', compact('stand'));
+        return view('entrepreneur.dashboard', [ // Utilisation de 'dashboard' ici car votre vue est nommée ainsi
+            'stand' => $stand,
+            'standName' => $stand->nom_stand,
+            'productsCount' => $productsCount,
+            'ordersCount' => $ordersCount,
+            'revenue' => $revenue,
+            'visibility' => $visibility,
+            'isApproved' => $isApproved,
+        ]);
     }
 }

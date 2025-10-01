@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commandes', function (Blueprint $table) {
+        Schema::create('produits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('nom');
+            $table->text('description')->nullable();
+            $table->decimal('prix', 10, 2);
+            $table->string('image_url', 512)->nullable();
             $table->foreignId('stand_id')->nullable()->constrained('stands')->onDelete('cascade');
-            $table->string('statut')->default('en_attente'); // ou confirmé, livré, etc.
-            $table->decimal('montant', 10, 2);
-            $table->timestamps();
+            $table->timestamps(); // Ajout des colonnes created_at et updated_at
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commandes');
+        Schema::dropIfExists('produits');
     }
 };

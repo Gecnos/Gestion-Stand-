@@ -30,11 +30,11 @@
                 {{-- Liens de Navigation --}}
                 <div class="flex items-center space-x-4">
                     
-                    {{-- Lien Nos Exposants (visible même pour les utilisateurs connectés) --}}
+                    {{-- Lien Nos Exposants (visible même pour les utilisateurs connectés)
                     <a href="{{ route('stands.index') }}" 
                        class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition duration-150">
                         Nos Exposants
-                    </a>
+                    </a> --}}
 
                     @auth
                         {{-- Menu Utilisateur Connecté (Basé sur image_ba9af0.png) --}}

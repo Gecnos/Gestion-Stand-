@@ -15,7 +15,7 @@ class CheckStand
 
         // Si pas de stand, redirige vers création
         if (!$user->stand) {
-            return redirect()->route('stands.create');
+            return redirect()->route('entrepreneur.create');
         }
 
         // Sinon laisse continuer

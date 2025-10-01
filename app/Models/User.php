@@ -47,6 +47,6 @@ class User extends Authenticatable
     }
     public function stand()
     {
-        return $this->hasOne(Stand::class);
+        return $this->hasOne(Stand::class, 'utilisateur_id');
     }
 }
