@@ -80,18 +80,20 @@ class StandController extends Controller
             return back()->with('error', 'Action non autorisée.');
         }
 
-        $imagePath = null;
+        $imagePath = null; // Initialisation de $imagePath
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        Produits::create([
-            'nom' => $request->name,
+        $data = [
+            'nom' => $request->nom,
             'description' => $request->description,
-            'prix' => $request->price,
+            'prix' => $request->prix,
             'image_url' => $imagePath,
             'stand_id' => $stand->id,
-        ]);
+        ];
+        
+        Produits::create($data);
 
         return redirect()->route('entrepreneur.dashboard')->with('success', 'Produit ajouté avec succès !');
     }
@@ -133,24 +135,13 @@ class StandController extends Controller
     public function updateProduct(Request $request, $id)
     {
         $product = Produits::findOrFail($id);
-        if ($product->stand->utilisateur_id !== Auth::id()) {
-            return redirect()->route('entrepreneur.products.index')->with('error', 'Action non autorisée.');
+        if ($stand->id != $request->input('stand_id')) {
+            return back()->with('error', 'Action non autorisée.');
         }
 
-        $request->validate([
-            'nom' => 'required|string|max:255',
-            'description' => 'required|string',
-            'prix' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
+        $imagePath = null; // Initialisation de $imagePath
         if ($request->hasFile('image')) {
-            // Supprimer l'ancienne image si elle existe
-            if ($product->image_url) {
-                Storage::disk('public')->delete($product->image_url);
-            }
             $imagePath = $request->file('image')->store('products', 'public');
-            $product->image_url = $imagePath;
         }
 
         $product->nom = $request->nom;
