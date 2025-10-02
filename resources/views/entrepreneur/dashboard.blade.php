@@ -96,7 +96,7 @@
                     <h2 class="text-2xl font-bold text-gray-900 mb-2">Gestion des Produits</h2>
                     <p class="text-gray-600 mb-6">Ajoutez, modifiez ou supprimez vos produits du catalogue.</p>
                     <div class="flex space-x-4">
-                        <a href="{{ route('products.index', $stand->id) }}"
+                        <a href="{{ route('entrepreneur.products.index') }}"
                            class="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg 
                                   shadow-sm text-white bg-gray-900 hover:bg-gray-700 transition duration-150 ease-in-out">
                             Gérer mes produits

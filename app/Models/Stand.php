@@ -12,4 +12,9 @@ class Stand extends Model
     {
         return $this->hasMany(Produits::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'utilisateur_id');
+    }
 }

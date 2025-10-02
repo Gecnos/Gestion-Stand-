@@ -25,7 +25,7 @@
                             <div class="relative h-48">
 
                                 <img class="w-full h-full object-cover" 
-                                     src="{{ $stand->image_url ?? 'https://placehold.co/600x400/2F3647/FFFFFF?text=Stand+Image' }}" 
+                                     src="{{ $stand->image_url ? asset('storage/' . $stand->image_url) : 'https://placehold.co/600x400/2F3647/FFFFFF?text=Stand+Image' }}" 
                                      alt="Image du stand de {{ $stand->nom_stand }}">
                                 
 

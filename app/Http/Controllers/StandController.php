@@ -8,6 +8,7 @@ use App\Models\Commande;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage; // Ajout de l'import Storage
 
 class StandController extends Controller
 {
@@ -34,7 +35,7 @@ class StandController extends Controller
         // Upload si une image est présente
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('stands', 'public');
-            $validated['image_url'] = 'storage/' . $path;
+            $validated['image_url'] = $path; // Correction ici
         }
 
         $validated['utilisateur_id'] = Auth::id();
@@ -65,9 +66,9 @@ class StandController extends Controller
     public function storeProduct(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
+            'prix' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'stand_id' => 'required|exists:stands,id'
         ]);
@@ -105,6 +106,76 @@ class StandController extends Controller
         $orders = Commande::where('stand_id', $stand->id)->with('user')->latest()->get();
 
         return view('orders.index', ['orders' => $orders, 'stand' => $stand]);
+    }
+
+    public function productsIndex()
+    {
+        $stand = Auth::user()->stand;
+        if (!$stand) {
+            return redirect()->route('entrepreneur.create')->with('error', 'Vous devez avoir un stand pour voir vos produits.');
+        }
+
+        $products = $stand->produits()->latest()->get();
+
+        return view('products.index', ['products' => $products, 'stand' => $stand]);
+    }
+
+    public function editProduct($id)
+    {
+        $product = Produits::findOrFail($id);
+        // Vérifier que le produit appartient bien au stand de l'entrepreneur connecté
+        if ($product->stand->utilisateur_id !== Auth::id()) {
+            return redirect()->route('entrepreneur.products.index')->with('error', 'Vous n\'êtes pas autorisé à modifier ce produit.');
+        }
+        return view('products.edit', compact('product'));
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $product = Produits::findOrFail($id);
+        if ($product->stand->utilisateur_id !== Auth::id()) {
+            return redirect()->route('entrepreneur.products.index')->with('error', 'Action non autorisée.');
+        }
+
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'required|string',
+            'prix' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($product->image_url) {
+                Storage::disk('public')->delete($product->image_url);
+            }
+            $imagePath = $request->file('image')->store('products', 'public');
+            $product->image_url = $imagePath;
+        }
+
+        $product->nom = $request->nom;
+        $product->description = $request->description;
+        $product->prix = $request->prix;
+        $product->save();
+
+        return redirect()->route('entrepreneur.products.index')->with('success', 'Produit mis à jour avec succès !');
+    }
+
+    public function destroyProduct($id)
+    {
+        $product = Produits::findOrFail($id);
+        if ($product->stand->utilisateur_id !== Auth::id()) {
+            return redirect()->route('entrepreneur.products.index')->with('error', 'Action non autorisée.');
+        }
+
+        // Supprimer l'image associée si elle existe
+        if ($product->image_url) {
+            Storage::disk('public')->delete($product->image_url);
+        }
+
+        $product->delete();
+
+        return redirect()->route('entrepreneur.products.index')->with('success', 'Produit supprimé avec succès !');
     }
 
     public function addToCart(Request $request)

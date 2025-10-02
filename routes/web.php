@@ -50,15 +50,17 @@ Route::post('/stands', [StandController::class, 'createStand'])->name('stands.st
 
 Route::middleware(['auth', 'entrepreneur', 'check.stand'])->group(function () {
     Route::get('/entrepreneur/dashboard', [StandController::class, 'dashboard'])->name('entrepreneur.dashboard');
-    Route::post('/products', [StandController::class, 'storeProduct'])->name('products.store');
-    Route::get('/entrepreneur/orders', [StandController::class, 'orders'])->name('entrepreneur.orders'); // Nouvelle route pour les commandes de l'entrepreneur
+        Route::post('/products', [StandController::class, 'storeProduct'])->name('entrepreneur.products.store');
+    Route::get('/entrepreneur/orders', [StandController::class, 'orders'])->name('entrepreneur.orders');
+    Route::get('/entrepreneur/products', [StandController::class, 'productsIndex'])->name('entrepreneur.products.index');
+    Route::get('/entrepreneur/products/{id}/edit', [StandController::class, 'editProduct'])->name('entrepreneur.products.edit');
+    Route::put('/entrepreneur/products/{id}', [StandController::class, 'updateProduct'])->name('entrepreneur.products.update');
+    Route::delete('/entrepreneur/products/{id}', [StandController::class, 'destroyProduct'])->name('entrepreneur.products.destroy');
     Route::get('/entrepreneur/panier', function () {
         return view('entrepreneur.panier');
     })->name('entrepreneur.panier');
 });
-Route::get('/products/index', [StandController::class, 'index'])->name('products.index');
 Route::get('/products/create', [StandController::class, 'createProduct'])->name('products.create');
-Route::get('/products/{id}', [StandController::class, 'show'])->name('products.show');
 Route::get('/orders', [StandController::class, 'orders'])->name('orders.index');
 Route::get('/attente', function () {
     return view('attente');

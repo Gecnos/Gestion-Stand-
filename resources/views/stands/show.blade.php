@@ -22,8 +22,7 @@
         {{-- Bannière du Stand --}}
         <div class="relative bg-gray-900 h-96 overflow-hidden">
             <img class="w-full h-full object-cover opacity-60" 
-                 {{-- Utilisation d'une image téléchargée comme fallback --}}
-                 src="{{ $stand->image_url ?? '__file_url__uploaded:image_480d8e.jpg-d1210ae2-3e1e-4411-845c-bedb13e86bbf' }}" 
+                 src="{{ $stand->image_url ? asset('storage/' . $stand->image_url) : 'https://placehold.co/1200x400/2F3647/FFFFFF?text=Stand+Image' }}" 
                  alt="Image du stand {{ $stand->nom_stand }}">
             
             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
@@ -72,7 +71,7 @@
                                 
                                 {{-- IMAGE DU PRODUIT AJOUTÉE ICI --}}
                                 @php
-                                    $productImageUrl = $produit->image_url ?? 'https://placehold.co/600x400/3e4554/FFF?text=Produit';
+                                    $productImageUrl = $produit->image_url ? asset('storage/' . $produit->image_url) : 'https://placehold.co/600x400/3e4554/FFF?text=Produit';
                                 @endphp
 
                                 <div class="h-48">
